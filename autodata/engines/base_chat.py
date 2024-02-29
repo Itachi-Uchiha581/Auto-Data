@@ -43,7 +43,7 @@ class __BaseChat:
         :return: A Python list in the form of a string containing the different chat topics
         """
         completion = self.client.chat.completions.create(
-            model=self.MODEL,
+            model="gpt-4-turbo-preview",
             messages=[
                 {
                     "role": "system",

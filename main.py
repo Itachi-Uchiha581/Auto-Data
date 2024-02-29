@@ -39,18 +39,21 @@ def main():
         type=int,
         help="""An integer to indicate how many chats to be created on the topic.
         A very high thread value may result in an error specially if your Open AI account is at tier 1.""",
+        default=1,
     )
     parser.add_argument(
         "--length",
         "-l",
         type=int,
         help="The conversation length of a chat topic",
+        default=1,
     )
     parser.add_argument(
         "--system_prompt",
         "-sp",
         type=str,
         help="The system prompt that is to be given to the assistant.",
+        default="You are a helpful assistant.",
     )
     args = parser.parse_args()
     try:

@@ -128,6 +128,7 @@ class Native(__BaseChat):
                 # Extract the text after "Human:"
                 input_string = input_string[human_index + len("Human:") :].strip()
                 logging.info("Formatted the user's (bot) question")
+            print(input_string)
 
             history_user.append(
                 {"role": "assistant", "content": "Human:" + str(input_string)}
@@ -139,13 +140,15 @@ class Native(__BaseChat):
                     "content": f"{input_string}",
                 }
             )
+            print(history_assistant)
 
             assistant_reply = self.__assistant_proxy_agent(history_assistant)
+            print(assistant_reply)
             logging.info("Attained the Assistants reply")
             history_user.append(
                 {
                     "role": "user",
-                    "content": f"Assistant{assistant_reply}",
+                    "content": f"Assistant:{assistant_reply}",
                 }
             )
             history_assistant.append(

@@ -10,7 +10,7 @@ class __BaseChat:
         key: str,
         model: str,
         data_format: str,
-        system_prompt="Your are a helpful assistant.",
+        system_prompt: str,
     ):
         """
         The function takes the following arguments:-

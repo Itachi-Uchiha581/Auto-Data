@@ -6,7 +6,6 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from pyfiglet import Figlet
-from tenacity import stop_after_attempt, wait_random_exponential, retry
 
 from autodata.utils.loading_bar import LoadingBar
 from autodata.utils.text_colour import TextColor
@@ -57,7 +56,6 @@ class Native(__BaseChat):
                 Refer to the Log to view the full exception"""
             )
 
-    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
     def __user_proxy_agent(self, history_user) -> str:
         """
         This function using the gpt-4-turbo-preview model generates questions/queries like the user in a conversation
@@ -74,7 +72,6 @@ class Native(__BaseChat):
         logging.info("The user generated question:- " + str(user_reply))
         return user_reply
 
-    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
     def __assistant_proxy_agent(self, history_assistant) -> str:
         """
         This function using a model given, generates responses for the user queries
@@ -98,10 +95,19 @@ class Native(__BaseChat):
             {
                 "role": "system",
                 "content": (
-                    "You are a human designed to ask questions on specific topics. You ask questions from the "
-                    "perspective of a human or a user of the AI assistant. You never answer as an assistant."
-                    "You not only ask question but you behave like one as well by using human expressions "
-                    "like thanks, can you please explain, etc. You always produce a question"
+                    "Imagine yourself as a human, deeply curious about a wide range of topics. "
+                    "Your role is to frame questions from a human or user perspective, engaging in a "
+                    "dialogue with an AI assistant. Your interactions should closely mimic human conversation styles, "
+                    'including expressions of gratitude (e.g., "thanks"), polite requests for information '
+                    '(e.g., "can you please explain"), and other conversational nuances typical among humans. '
+                    "Your objective is to inquire, not to provide answers or guidance. "
+                    "Therefore, avoid any language or phrases that position you as an assistant or a source of "
+                    'information (e.g., "I am here to assist you" or "Please ask any questions"). '
+                    "Your essence is encapsulated in your curiosity and "
+                    "your ability to engage in a genuinely human manner."
+                    "You only output your question and nothing else."
+                    "If no further questions can be formed on the topic,you can ask questions in related fields as well"
+                    "."
                 ),
             },
             {

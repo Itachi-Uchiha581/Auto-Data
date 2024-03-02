@@ -1,28 +1,27 @@
 from threading import Thread
 import logging
 
+from pyfiglet import Figlet
+
 from autodata.utils.loading_bar import LoadingBar
 from autodata.utils.text_colour import TextColor
 from autodata.data_structures.chat_history import ChatHistory
 from autodata.data_structures.topic_history import TopicHistory
 from autodata.engines.base_chat import __BaseChat
+'''
+Ignore the Import Errors
+'''
 
-logging.basicConfig(
-    level=logging.INFO,
-    filename=r"logs/native.log",
-    filemode="w",
-    encoding="utf-8",
-    format="%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s",
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler("logs/example.log")
+formatter = logging.Formatter(
+    "%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s"
 )
 
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
-# Put all the code that can be added to the base_chat class: staus - done
-# The above will reduce code form here and make it modular meaning if anyone wants to add new engines it would be extremely easy - status: done
-# Those who want to make complex engines can override functions from the parent class - status : done
-# Then create pre-made test cases which the users after making the engines can run: doing
-# The base chat will have its own different log and the different engines will also have different logs
-# Finally create an example engine with vivid instructions which would portray the different ways through which engines can be created with easeby overloading or not overloading some of the functions of the base class! - status: Learning
-class Native(__BaseChat):
+class Example(__BaseChat):
     def __init__(
         self,
         topic: str,
@@ -38,10 +37,14 @@ class Native(__BaseChat):
 
     def __user_proxy_agent(self, history_user) -> str:
         """
-        This function using the gpt-4-turbo-preview model generates questions/queries like the user in a conversation
-        :param history_user: This is the history of messages in the "perspective" of a user
-        :return: The user query/question is returned
+        This function is place to act as a user proxy LLM, an llm which would behave like a human. Depending on your
+        architecture you can retain this function or delete it. Remove the comments in the main body of the function if
+        you wish to use this functionality.
+        :param history_user: The history in the perspective of the human/user
+        :return: The output form the user
         """
+
+        '''
         completion = self.client.chat.completions.create(
             model="gpt-4-turbo-preview",
             messages=history_user,
@@ -51,26 +54,28 @@ class Native(__BaseChat):
         user_reply = completion.choices[0].message.content
         logging.info("The user generated question:- " + str(user_reply))
         return user_reply
+        '''
 
     def __assistant_proxy_agent(self, history_assistant) -> str:
         """
-        This function using a model given, generates responses for the user queries
+        Opposite of the user proxy agent
         :param history_assistant: This is the history of messages in the "perspective" of an assistant
         :return: the assistant's reply is returned
         """
+        '''
         completion = self.client.chat.completions.create(
             model=self.MODEL, messages=history_assistant, temperature=1, stream=False
         )
         return completion.choices[0].message.content
-
+        '''
     def __chat_manager(self, topic):
         """
         This function acts as the manager between the user and the assistant. It passes the queries of the user llm
-        to the assistant llm.
+        to the assistant llm. This is the brain of the engine. Modify it to get fruitful results.
         :param topic: The topic on which the fragmented chat topics were generated
         :return: It returns the whole chat history between the user and the assistant
         """
-        # if nothing works fix the prompt given as last hope
+        '''
         history_user = [
             {
                 "role": "system",
@@ -140,12 +145,15 @@ class Native(__BaseChat):
                 system_prompt=self.SYSTEM_PROMPT,
             )
         )
+        '''
 
     def __compiler(self) -> TopicHistory:
         """
-        This function calls the chat_manager through the collector asynchronously to improve speed
+        This function calls the chat_manager through the collector asynchronously to improve speed. Edit the function
+        to improve the speed of the LLM and add extensible features.
         :return: The organised and cleaned chat history
         """
+        '''
         threads = []
         chat_complete = 0
         print(
@@ -176,11 +184,16 @@ class Native(__BaseChat):
             threads=self.THREADS,
             length=self.CONVERSATION_LENGTH,
         )
+        '''
 
     def __call__(self) -> TopicHistory:
         """
+        Calls everything, No modification shallbe needed here
         :return: The Topic History Data object
         """
+        '''
+        
         data_chats = self.__compiler()
         self.__save_date(data_chats.to_dict())
         return data_chats
+        '''

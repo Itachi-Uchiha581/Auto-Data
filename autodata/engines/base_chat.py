@@ -126,5 +126,3 @@ class __BaseChat:
                 f"""An error occurred while saving the data as {self.FORMAT}. Refer to the log 
             ./logs/engine.log for more information"""
             )
-
-

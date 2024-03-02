@@ -1,6 +1,8 @@
 import argparse
 import os
 
+from pyfiglet import Figlet
+
 from autodata.utils.text_colour import TextColor
 from autodata import Native
 
@@ -64,6 +66,8 @@ def main():
             https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety """
         )
     if args.engine == "native":
+        text_obj = Figlet("dos_rebel", width=200)
+        print("\n", text_obj.renderText("Auto Data"))
         data_generator = Native(
             args.topic,
             args.threads,

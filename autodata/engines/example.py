@@ -12,7 +12,9 @@ from autodata.engines.base_chat import __BaseChat
 """
 Ignore the Import Errors
 """
-
+"""
+from utils, beautification code can be imported
+"""
 logger = logging.getLogger(__name__)
 handler = logging.FileHandler("logs/example.log")
 formatter = logging.Formatter(

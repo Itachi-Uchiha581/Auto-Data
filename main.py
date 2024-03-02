@@ -14,7 +14,10 @@ def main():
         prog="Auto Data",
     )
     parser.add_argument(
-        "--model", "-m", help="Selection of an OpenAI model for data generation"
+        "--model",
+        "-m",
+        help="Selection of an OpenAI model for data generation",
+        default="gpt-4-turbo-preview",
     )
     parser.add_argument(
         "--topic", "-t", help="Topic for data generation, eg - Global Economy"
@@ -69,7 +72,7 @@ def main():
             args.system_prompt,
         )
 
-        print(TextColor.YELLOW + str(data_generator()) + TextColor.RESET)
+        print(TextColor.YELLOW + str(data_generator("./output")) + TextColor.RESET)
 
 
 if __name__ == "__main__":

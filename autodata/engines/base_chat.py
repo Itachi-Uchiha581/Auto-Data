@@ -7,17 +7,6 @@ import pyarrow.parquet as pq
 from openai import OpenAI
 import os
 
-if not os.path.exists("logs"):
-    os.makedirs("logs")
-logger = logging.getLogger(__name__)
-handler = logging.FileHandler("./logs/base_chat.log")
-formatter = logging.Formatter(
-    "%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s"
-)
-
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
 
 class __BaseChat:
     def __init__(
@@ -34,7 +23,6 @@ class __BaseChat:
         :param topic: The topic on which the chat is intended to be generated
         :param threads: The number of chats to be generated
         :param length: The value to indicate how long a chat session will be
-        :param key: The Open AI key
         :param model: The Open AI model through which data will be generated
         :param data_format: The format in which the generated data will be presented
         """
@@ -84,7 +72,7 @@ class __BaseChat:
         )
         return completion.choices[0].message.content.lower()
 
-    def __get_topic(self) -> list:
+    def get_topic(self) -> list:
         """
         This function converts the list in string form to a valid list in python assigned to the variable chat_topic
         using the eval() function in python
@@ -104,9 +92,10 @@ class __BaseChat:
                 Refer to the Log to view the full exception"""
             )
 
-    def __save_date(self, data):
+    def save_date(self, data: dict, path: str):
         """
         This function saves the chat history in the desired format
+        :param path: the folder where the file is to be saved
         :param data: The Chat history
         """
         try:
@@ -119,7 +108,7 @@ class __BaseChat:
                 df = pd.DataFrame(data)
                 table = pa.Table.from_pandas(df=df, nthreads=2)
 
-                parquet_file = f"./output/{self.TOPIC}_chat.parquet"
+                parquet_file = f"{path}/{self.TOPIC}_chat.parquet"
                 pq.write_table(table, parquet_file)
                 logging.info("Successfully saved the data as parquet")
         except:

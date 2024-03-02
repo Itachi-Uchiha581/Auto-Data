@@ -155,7 +155,7 @@ class Native(__BaseChat):
             "\n",
         )
         LoadingBar.loading_bar(chat_complete, self.THREADS)
-        for topic in self.__get_topic():
+        for topic in self.get_topic():
             threads.append(Thread(target=self.__chat_manager, args=[topic]))
         for t in threads:
             t.start()
@@ -179,10 +179,10 @@ class Native(__BaseChat):
             length=self.CONVERSATION_LENGTH,
         )
 
-    def __call__(self) -> TopicHistory:
+    def __call__(self, path) -> TopicHistory:
         """
         :return: The Topic History Data object
         """
         data_chats = self.__compiler()
-        self.__save_date(data_chats.to_dict())
+        self.save_date(data_chats.to_dict(), path)
         return data_chats

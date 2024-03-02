@@ -1,10 +1,6 @@
 from threading import Thread
-import json
 import logging
 
-import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
 from pyfiglet import Figlet
 
 from autodata.utils.loading_bar import LoadingBar
@@ -15,13 +11,19 @@ from autodata.engines.base_chat import __BaseChat
 
 logging.basicConfig(
     level=logging.INFO,
-    filename=r"logs/engine.log",
+    filename=r"logs/native.log",
     filemode="w",
     encoding="utf-8",
     format="%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s",
 )
 
 
+# Put all the code that can be added to the base_chat class
+# The above will reduce code form here and make it modular meaning if anyone wants to add new engines it would be extremely easy - status: Learning
+# Those who want to make complex engines can override functions from the parent class - status : Learning
+# Then create pre-made test cases which the users after making the engines can run
+# The base chat will have its own different log and the different engines will also have different logs
+# Finally create an example engine with vivid instructions which would portray the different ways through which engines can be created with easeby overloading or not overloading some of the functions of the base class! - status: Learning
 class Native(__BaseChat):
     def __init__(
         self,
@@ -35,26 +37,6 @@ class Native(__BaseChat):
     ):
         super().__init__(topic, threads, length, key, model, data_format, system_prompt)
         self.chat_history = []
-
-    def __get_topic(self) -> list:
-        """
-        This function converts the list in string form to a valid list in python assigned to the variable chat_topic
-        using the eval() function in python
-        :return: A python list containing all chat topics
-        """
-        try:
-            chat_topics = eval(self.initiate_chat())
-            logging.info("The Chat Topic generated are: " + str(chat_topics))
-            return chat_topics
-        except:
-            logging.exception(
-                """The model was not able to produce a valid python list. 
-                Try a different/better Open AI model. Below is the full error: """
-            )
-            raise Exception(
-                """The model was not able to produce a valid python list. Try a different/better Open AI model. 
-                Refer to the Log to view the full exception"""
-            )
 
     def __user_proxy_agent(self, history_user) -> str:
         """
@@ -161,29 +143,7 @@ class Native(__BaseChat):
             )
         )
 
-    def __save_date(self, data):
-        """
-        This function saves the chat history in the desired format
-        :param data: The Chat history
-        """
-        try:
-            if self.FORMAT == "json":
-                with open(f"./output/{self.TOPIC}_chat.json", "w") as json_file:
-                    json.dump(data, json_file, indent=2)
-                logging.info("Successfully saved the data as json")
 
-            elif self.FORMAT == "parquet":
-                df = pd.DataFrame(data)
-                table = pa.Table.from_pandas(df=df, nthreads=2)
-
-                parquet_file = f"./output/{self.TOPIC}_chat.parquet"
-                pq.write_table(table, parquet_file)
-                logging.info("Successfully saved the data as parquet")
-        except:
-            logging.exception(
-                f"""An error occurred while saving the data as {self.FORMAT}. Refer to the log 
-            ./logs/engine.log for more information"""
-            )
 
     def __compiler(self) -> TopicHistory:
         """

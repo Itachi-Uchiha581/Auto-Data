@@ -1,4 +1,19 @@
+import logging
+import json
+
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler("logs/base_chat.log")
+formatter = logging.Formatter(
+    "%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s"
+)
+
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class __BaseChat:
@@ -67,3 +82,49 @@ class __BaseChat:
             seed=50,
         )
         return completion.choices[0].message.content.lower()
+
+    def __get_topic(self) -> list:
+        """
+        This function converts the list in string form to a valid list in python assigned to the variable chat_topic
+        using the eval() function in python
+        :return: A python list containing all chat topics
+        """
+        try:
+            chat_topics = eval(self.initiate_chat())
+            logging.info("The Chat Topic generated are: " + str(chat_topics))
+            return chat_topics
+        except:
+            logging.exception(
+                """The model was not able to produce a valid python list. 
+                Try a different/better Open AI model. Below is the full error: """
+            )
+            raise Exception(
+                """The model was not able to produce a valid python list. Try a different/better Open AI model. 
+                Refer to the Log to view the full exception"""
+            )
+
+    def __save_date(self, data):
+        """
+        This function saves the chat history in the desired format
+        :param data: The Chat history
+        """
+        try:
+            if self.FORMAT == "json":
+                with open(f"./output/{self.TOPIC}_chat.json", "w") as json_file:
+                    json.dump(data, json_file, indent=2)
+                logging.info("Successfully saved the data as json")
+
+            elif self.FORMAT == "parquet":
+                df = pd.DataFrame(data)
+                table = pa.Table.from_pandas(df=df, nthreads=2)
+
+                parquet_file = f"./output/{self.TOPIC}_chat.parquet"
+                pq.write_table(table, parquet_file)
+                logging.info("Successfully saved the data as parquet")
+        except:
+            logging.exception(
+                f"""An error occurred while saving the data as {self.FORMAT}. Refer to the log 
+            ./logs/engine.log for more information"""
+            )
+
+

@@ -6,10 +6,13 @@ from autodata.utils.text_colour import TextColor
 from autodata.data_structures.chat_history import ChatHistory
 from autodata.data_structures.topic_history import TopicHistory
 from autodata.engines.base_chat import __BaseChat
+import os
 
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 logging.basicConfig(
     level=logging.INFO,
-    filename=r"logs/native.log",
+    filename=r"./logs/native.log",
     filemode="w",
     encoding="utf-8",
     format="%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s",
@@ -28,12 +31,11 @@ class Native(__BaseChat):
         topic: str,
         threads: int,
         length: int,
-        key: str,
         model: str,
         data_format: str,
         system_prompt: str,
     ):
-        super().__init__(topic, threads, length, key, model, data_format, system_prompt)
+        super().__init__(topic, threads, length, model, data_format, system_prompt)
         self.chat_history = []
 
     def __user_proxy_agent(self, history_user) -> str:

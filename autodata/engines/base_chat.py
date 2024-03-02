@@ -5,9 +5,12 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from openai import OpenAI
+import os
 
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 logger = logging.getLogger(__name__)
-handler = logging.FileHandler("logs/base_chat.log")
+handler = logging.FileHandler("./logs/base_chat.log")
 formatter = logging.Formatter(
     "%(filename)s , %(funcName)s , %(lineno)d , %(levelname)s , %(message)s"
 )
@@ -22,7 +25,6 @@ class __BaseChat:
         topic: str,
         threads: int,
         length: int,
-        key: str,
         model: str,
         data_format: str,
         system_prompt: str,
@@ -39,7 +41,6 @@ class __BaseChat:
         # Validation of variables
         assert length > 0, f"Length passed - {length} should be greater than 0"
         assert threads > 0, f"Threads passed - {threads} should be greater than 0"
-        assert "sk" in key, f"Invalid API KEY passed - {key}"
 
         # Variable declaration
         self.CONVERSATION_LENGTH = length
@@ -47,9 +48,9 @@ class __BaseChat:
         self.THREADS = threads
         self.MODEL = model
         self.FORMAT = data_format
-        self.KEY = key
+        self.KEY = os.environ["OPENAI_API_KEY"]
         self.SYSTEM_PROMPT = system_prompt
-        self.client = OpenAI(api_key=key)
+        self.client = OpenAI(api_key=self.KEY)
 
     def initiate_chat(self) -> str:
         """

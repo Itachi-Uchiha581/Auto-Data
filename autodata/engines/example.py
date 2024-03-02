@@ -8,9 +8,10 @@ from autodata.utils.text_colour import TextColor
 from autodata.data_structures.chat_history import ChatHistory
 from autodata.data_structures.topic_history import TopicHistory
 from autodata.engines.base_chat import __BaseChat
-'''
+
+"""
 Ignore the Import Errors
-'''
+"""
 
 logger = logging.getLogger(__name__)
 handler = logging.FileHandler("logs/example.log")
@@ -20,6 +21,7 @@ formatter = logging.Formatter(
 
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
 
 class Example(__BaseChat):
     def __init__(
@@ -44,7 +46,7 @@ class Example(__BaseChat):
         :return: The output form the user
         """
 
-        '''
+        """
         completion = self.client.chat.completions.create(
             model="gpt-4-turbo-preview",
             messages=history_user,
@@ -54,7 +56,7 @@ class Example(__BaseChat):
         user_reply = completion.choices[0].message.content
         logging.info("The user generated question:- " + str(user_reply))
         return user_reply
-        '''
+        """
 
     def __assistant_proxy_agent(self, history_assistant) -> str:
         """
@@ -62,12 +64,13 @@ class Example(__BaseChat):
         :param history_assistant: This is the history of messages in the "perspective" of an assistant
         :return: the assistant's reply is returned
         """
-        '''
+        """
         completion = self.client.chat.completions.create(
             model=self.MODEL, messages=history_assistant, temperature=1, stream=False
         )
         return completion.choices[0].message.content
-        '''
+        """
+
     def __chat_manager(self, topic):
         """
         This function acts as the manager between the user and the assistant. It passes the queries of the user llm
@@ -75,7 +78,7 @@ class Example(__BaseChat):
         :param topic: The topic on which the fragmented chat topics were generated
         :return: It returns the whole chat history between the user and the assistant
         """
-        '''
+        """
         history_user = [
             {
                 "role": "system",
@@ -145,7 +148,7 @@ class Example(__BaseChat):
                 system_prompt=self.SYSTEM_PROMPT,
             )
         )
-        '''
+        """
 
     def __compiler(self) -> TopicHistory:
         """
@@ -153,7 +156,7 @@ class Example(__BaseChat):
         to improve the speed of the LLM and add extensible features.
         :return: The organised and cleaned chat history
         """
-        '''
+        """
         threads = []
         chat_complete = 0
         print(
@@ -184,16 +187,16 @@ class Example(__BaseChat):
             threads=self.THREADS,
             length=self.CONVERSATION_LENGTH,
         )
-        '''
+        """
 
     def __call__(self) -> TopicHistory:
         """
         Calls everything, No modification shallbe needed here
         :return: The Topic History Data object
         """
-        '''
+        """
         
         data_chats = self.__compiler()
         self.__save_date(data_chats.to_dict())
         return data_chats
-        '''
+        """

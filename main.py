@@ -28,6 +28,7 @@ def main():
         type=str,
         help="The format of the output data produced by the LLM",
         choices=["json", "parquet"],
+        default="json",
     )
     parser.add_argument(
         "--engine",
@@ -35,6 +36,7 @@ def main():
         type=str,
         help="The backend used to generate data. More engines coming soon",
         choices=["native"],
+        default="native",
     )
     parser.add_argument(
         "--threads",

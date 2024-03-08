@@ -144,7 +144,9 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 **Contributions can be made by making the existing code efficient and cleaner, adding new engines (an example engine with guide is already given inside autodata/engines), adding LLM training data analyser, creating testing scripts etc.**
-
+## Upcoming Features
+_Data Analysis Of LLM Data using a Bert Based Text Classifier: In progress_
 ## License
 
 Distributed under the GPL-3.0 License. See `LICENSE.txt` for more information.
+

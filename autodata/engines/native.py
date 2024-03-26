@@ -19,12 +19,6 @@ logging.basicConfig(
 )
 
 
-# Put all the code that can be added to the base_chat class: staus - done
-# The above will reduce code form here and make it modular meaning if anyone wants to add new engines it would be extremely easy - status: done
-# Those who want to make complex engines can override functions from the parent class - status : done
-# Then create pre-made test cases which the users after making the engines can run: doing
-# The base chat will have its own different log and the different engines will also have different logs
-# Finally create an example engine with vivid instructions which would portray the different ways through which engines can be created with easeby overloading or not overloading some of the functions of the base class! - status: Learning
 class Native(__BaseChat):
     def __init__(
         self,

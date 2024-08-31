@@ -38,7 +38,7 @@ class __BaseChat:
         self.FORMAT = data_format
         self.KEY = os.environ["OPENAI_API_KEY"]
         self.SYSTEM_PROMPT = system_prompt
-        self.client = OpenAI(api_key=self.KEY)
+        self.client = OpenAI(api_key=self.KEY, base_url=os.environ.get("OPENAI_API_BASE", None))
 
     def initiate_chat(self) -> str:
         """

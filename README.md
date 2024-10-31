@@ -130,6 +130,7 @@ Before continuing set up your OPENAI_API_KEY as your environment variable. If yo
 -->
 ## Tutorials:
 1. [**Creating a Customer Service Agent by Fine-Tuning GPT-3.5-Turbo**](https://medium.com/@adeebfaiyaz/auto-data-generating-custom-datasets-to-fine-tune-gpt-3-5-using-python-2fcd857d6011?source=friends_link&sk=007cbd8a75f9da6ea2e8ded82f1bc30a)
+2. Thanks to the Author for creating this amazing resource! - [**Automatically Create LLM Fine-tuning Datasets Locally - AutoData**](https://www.youtube.com/watch?v=IZDtI0EgqwA&ab_channel=FahdMirza)
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
